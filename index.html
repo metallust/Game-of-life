@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Sketch</title>
+        <link rel="stylesheet" type="text/css" href="style.css" />
+        <script src="libraries/p5.min.js"></script>
+    </head>
+
+    <body>
+        <nav>
+            <h1>Navbar Title</h1>
+            <div class="navbar-buttons">
+                <button id="toggle-button">Start (Space)</button>
+                <button class="reset-btn">Reset</button>
+                <button class="randomize-btn">Randomize</button>
+                <label for="resize-slider">Resize:</label>
+                <input
+                    type="range"
+                    id="resize-slider"
+                    class="resize-slider"
+                    min="30"
+                    max="2000"
+                    value="100"
+                />
+                <label for="resize-slider" id="slidervalue">0</label>
+            </div>
+        </nav>
+
+        <script src="sketch.js"></script>
+    </body>
+</html>

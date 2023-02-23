@@ -250,6 +250,10 @@ function reset() {
 function randomize() {
     for (let i = 0; i < grid.length; i++) grid[i].state = false;
     start = false;
+    cols = 50;
+    let w = width / cols;
+    rows = floor(height / w);
+    output.textContent = cols;
     updateToggle();
     loadLivePixels();
 }

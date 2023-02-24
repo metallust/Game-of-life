@@ -304,6 +304,7 @@ slider.addEventListener("change", function () {
     const value = slider.value;
     changingCellWidth(parseInt(value));
     slider.blur();
+    updateToggle();
 });
 
 randomizeButton.addEventListener("click", function () {

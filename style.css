@@ -2,50 +2,57 @@ html,
 body {
     margin: 0;
     padding: 0;
+    font-family: Arial, sans-serif;
 }
 
 canvas {
     display: block;
     width: 100%;
 }
-nav {
+/* basic styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100%; /* set the height of the body to fill the viewport */
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #000000;
-    color: #fff;
-    padding: 10px;
-    width: calc(99% - 9px);
-    /* default width of the navbar */
+    flex-direction: column; /* use flexbox to position the footer at the bottom */
 }
 
-h1 {
+header,
+footer {
+    background-color: #b1aeae;
+    color: #494848;
+    padding: 10px;
+}
+
+header h1 {
+    font-size: 1.5em;
     margin: 0;
 }
 
-.navbar-buttons {
+footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed; /* position the footer at the bottom of the viewport */
+    bottom: 0;
+    left: 0;
+    width: 100%; /* make the footer fill the width of the viewport */
+}
+
+.controls {
     display: flex;
     align-items: center;
 }
 
-button {
-    background-color: #555;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    margin-right: 10px;
-    cursor: pointer;
-}
-
-label {
+.controls button {
     margin-right: 10px;
 }
 
-.resize-slider {
-    max-width: 100px;
-    min-width: 50px;
-}
-
-.button:focus {
-    outline: none;
+/* adjust title size for small screens */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 1.2em;
+    }
 }

@@ -1,8 +1,6 @@
 const toggleButton = document.getElementById("toggle-button");
 const resetButton = document.querySelector(".reset-btn");
-
 const slider = document.getElementById("resize-slider");
-const output = document.getElementById("slidervalue");
 const randomizeButton = document.querySelector(".randomize-btn");
 
 let grid = [];
@@ -15,14 +13,23 @@ let xoff = 0,
     yoff = 0;
 let xlen, ylen;
 
-const navbar = document.querySelector("nav");
-const navbarHeight = navbar.offsetHeight;
+// get header and footer elements
+const header = document.querySelector("header");
+const footer = document.querySelector("footer");
+
+// get size of header and footer in pixels
+const headerHeight = header.offsetHeight;
+const footerHeight = footer.offsetHeight;
 
 function setup() {
-    createCanvas(windowWidth, windowHeight - navbarHeight);
+    let canvas = createCanvas(
+        windowWidth,
+        windowHeight - headerHeight - footerHeight
+    );
+    canvas.parent("sketch-holder");
     let w = width / cols;
     rows = floor(height / w);
-    output.textContent = cols;
+
     for (let j = 0; j < rows; j++) {
         for (let i = 0; i < cols; i++) {
             grid.push(new Cell(i, j));
@@ -146,7 +153,6 @@ function readingPlainText(text) {
                 " " +
                 rows
         );
-        output.value = cols;
         slider.value = cols;
         slider.min = cols;
         changingCellWidth(cols);
@@ -220,9 +226,9 @@ function loadLivePixels() {
             let files = xhr.responseText.split("\n");
             let file = files[Math.floor(Math.random() * files.length)];
             // console.log(file);
-            const navbarTitle = document.querySelector("nav h1");
+            const navbarTitle = document.querySelector("h1");
             //loading file
-            // xhr.open("GET", "./all/3enginecordershiprake.rle");
+            // xhr.open("GET", "./all/linepuffer1.rle");
             xhr.open("GET", "./all/" + file);
             xhr.onload = function () {
                 if (xhr.status === 200) {
@@ -232,7 +238,7 @@ function loadLivePixels() {
                 }
             };
             xhr.send();
-            navbarTitle.textContent = file.slice(0, -4);
+            navbarTitle.textContent = file.slice(0, -4).toUpperCase();
         }
     };
     xhr.send();
@@ -253,7 +259,6 @@ function randomize() {
     cols = 50;
     let w = width / cols;
     rows = floor(height / w);
-    output.textContent = cols;
     updateToggle();
     loadLivePixels();
 }
@@ -271,13 +276,13 @@ function changingCellWidth(newCols) {
     }
     for (let i = 0; i < grid.length; i++) grid[i].addneigbour();
     readingPlainText(loadedtext);
-    output.textContent = cols;
     slider.value = cols;
 }
 
 toggleButton.addEventListener("click", function () {
     start = !start;
     updateToggle();
+    toggleButton.blur();
 });
 
 function updateToggle() {
@@ -297,7 +302,6 @@ resetButton.addEventListener("click", function () {
 
 slider.addEventListener("change", function () {
     const value = slider.value;
-    output.textContent = value;
     changingCellWidth(parseInt(value));
     slider.blur();
 });
@@ -306,3 +310,11 @@ randomizeButton.addEventListener("click", function () {
     randomize();
     randomizeButton.blur();
 });
+
+window.onresize = function () {
+    var w = window.innerWidth;
+    var h = window.innerHeight - headerHeight - footerHeight;
+    resizeCanvas(w, h);
+    cols = slider.value;
+    changingCellWidth(cols);
+};

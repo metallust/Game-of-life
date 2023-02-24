@@ -6,16 +6,31 @@
         <title>Sketch</title>
         <link rel="stylesheet" type="text/css" href="style.css" />
         <script src="libraries/p5.min.js"></script>
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+            crossorigin="anonymous"
+        />
     </head>
 
     <body>
-        <nav>
-            <h1>Navbar Title</h1>
-            <div class="navbar-buttons">
+        <header>
+            <h1>Conway's Game of Life</h1>
+        </header>
+        <main>
+            <div id="sketch-holder"></div>
+        </main>
+        <footer>
+            <div class="controls">
                 <button id="toggle-button">Start (Space)</button>
                 <button class="reset-btn">Reset</button>
                 <button class="randomize-btn">Randomize</button>
-                <label for="resize-slider">Resize:</label>
+                <label
+                    for="resize-slider"
+                    style="font-size: large; color: rgb(11, 11, 11)"
+                    >Resize :</label
+                >
                 <input
                     type="range"
                     id="resize-slider"
@@ -24,10 +39,14 @@
                     max="2000"
                     value="100"
                 />
-                <label for="resize-slider" id="slidervalue">0</label>
             </div>
-        </nav>
+        </footer>
 
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+            crossorigin="anonymous"
+        ></script>
         <script src="sketch.js"></script>
     </body>
 </html>

@@ -25,7 +25,7 @@ const footerHeight = footer.offsetHeight;
 function setup() {
     let canvas = createCanvas(
         windowWidth,
-        windowWidth - headerHeight - footerHeight
+        windowHeight - headerHeight - footerHeight
     );
     canvas.drawingContext.canvas.setAttribute("willReadFrequently", "true");
     canvas.parent("sketch-holder");

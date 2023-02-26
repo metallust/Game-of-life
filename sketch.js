@@ -12,6 +12,7 @@ let originx, originy;
 let xoff = 0,
     yoff = 0;
 let xlen, ylen;
+let file;
 
 // get header and footer elements
 const header = document.querySelector("header");
@@ -24,8 +25,9 @@ const footerHeight = footer.offsetHeight;
 function setup() {
     let canvas = createCanvas(
         windowWidth,
-        windowHeight - headerHeight - footerHeight
+        windowWidth - headerHeight - footerHeight
     );
+    canvas.drawingContext.canvas.setAttribute("willReadFrequently", "true");
     canvas.parent("sketch-holder");
     let w = width / cols;
     rows = floor(height / w);
@@ -41,17 +43,19 @@ function setup() {
 
 function draw() {
     if (start) {
-        background(51, 50);
-        let temp = [];
-        for (let i = 0; i < grid.length; i++) {
-            temp.push(grid[i].update());
-        }
-        for (let i = 0; i < grid.length; i++) {
-            if (grid[i].state !== temp[i]) {
-                grid[i].state = temp[i];
-                grid[i].display();
-            } else if (grid[i].state) {
-                grid[i].display();
+        for (let index = 0; index < 1; index++) {
+            background(51, 50);
+            let temp = [];
+            for (let i = 0; i < grid.length; i++) {
+                temp.push(grid[i].update());
+            }
+            for (let i = 0; i < grid.length; i++) {
+                if (grid[i].state !== temp[i]) {
+                    grid[i].state = temp[i];
+                    grid[i].display();
+                } else if (grid[i].state) {
+                    grid[i].display();
+                }
             }
         }
     }
@@ -224,16 +228,14 @@ function loadLivePixels() {
     xhr.onload = function () {
         if (xhr.status === 200) {
             let files = xhr.responseText.split("\n");
-            let file = files[Math.floor(Math.random() * files.length)];
+            file = files[Math.floor(Math.random() * files.length)];
             // console.log(file);
             const navbarTitle = document.querySelector("h1");
             //loading file
-            // xhr.open("GET", "./all/linepuffer1.rle");
             xhr.open("GET", "./all/" + file);
             xhr.onload = function () {
                 if (xhr.status === 200) {
                     text = xhr.responseText;
-                    console.log(text);
                     readingRLE(text);
                 }
             };
@@ -319,3 +321,10 @@ window.onresize = function () {
     cols = slider.value;
     changingCellWidth(cols);
 };
+
+function keyPressed() {
+    // this will download the first 5 seconds of the animation!
+    if (key === "s") {
+        saveGif(file.replace(".rle", ".gif"), 5);
+    }
+}

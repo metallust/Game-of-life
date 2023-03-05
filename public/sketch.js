@@ -37,7 +37,7 @@ function setup() {
             grid.push(new Cell(i, j));
         }
     }
-    loadLivePixels(); //randomly load a rle file from "all" folder
+    fetchRandomFileText(); //randomly load a rle file from "all" folder
     for (let i = 0; i < grid.length; i++) grid[i].addneigbour();
 }
 
@@ -222,28 +222,22 @@ function convertRLEtoPlainText(text, head) {
     console.log(newTxt);
     return newTxt;
 }
-function loadLivePixels() {
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", "files names/rle.txt");
-    xhr.onload = function () {
-        if (xhr.status === 200) {
-            let files = xhr.responseText.split("\n");
-            file = files[Math.floor(Math.random() * files.length)];
-            // console.log(file);
-            const navbarTitle = document.querySelector("h1");
-            //loading file
-            xhr.open("GET", "./all/" + file);
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    text = xhr.responseText;
-                    readingRLE(text);
-                }
-            };
-            xhr.send();
-            navbarTitle.textContent = file.slice(0, -4).toUpperCase();
-        }
+
+async function fetchRandomFileText() {
+    const options = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: "hello",
     };
-    xhr.send();
+    const response = await fetch("/random", options);
+    const json = await response.json();
+    console.log(json);
+    const navbarTitle = document.querySelector("h1");
+    navbarTitle.textContent = json.file.slice(0, -4).toUpperCase();
+    file = json.file;
+    readingRLE(json.text);
 }
 
 function reset() {
@@ -262,7 +256,7 @@ function randomize() {
     let w = width / cols;
     rows = floor(height / w);
     updateToggle();
-    loadLivePixels();
+    fetchRandomFileText();
 }
 
 function changingCellWidth(newCols) {
@@ -328,3 +322,46 @@ function keyPressed() {
         saveGif(file.replace(".rle", ".gif"), 5);
     }
 }
+
+function newLiveCells(text) {
+    for (let i = 0; i < grid.length; i++) grid[i].state = false;
+    start = false;
+    cols = 50;
+    let w = width / cols;
+    rows = floor(height / w);
+    updateToggle();
+    readingRLE(text);
+}
+
+const searchForm = document.querySelector("#search-form");
+searchForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const searchTerm = document.querySelector("#search-term").value;
+
+    const response = await fetch(`/search?term=${searchTerm}`);
+    const json = await response.json();
+
+    const results = json.result;
+    const searchResultsContainer = document.querySelector("#search-results");
+    searchResultsContainer.innerHTML = "";
+
+    if (results.length === 0) {
+        searchResultsContainer.textContent = "No results found.";
+    } else {
+        results.forEach((result) => {
+            const resultItem = document.createElement("div");
+            resultItem.textContent = result;
+            resultItem.addEventListener("click", async function () {
+                const response = await fetch("/file?file=" + result);
+                const json = await response.json();
+                console.log(json);
+                newLiveCells(json.text, result);
+                searchResultsContainer.innerHTML = "";
+                const navbarTitle = document.querySelector("h1");
+                navbarTitle.textContent = result.slice(0, -4).toUpperCase();
+                file = result;
+            });
+            searchResultsContainer.appendChild(resultItem);
+        });
+    }
+});

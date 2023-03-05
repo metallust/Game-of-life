@@ -9,40 +9,41 @@
     </head>
 
     <body>
-        <header>
-            <h1>Conway's Game of Life</h1>
-            <form id="search-form">
-                <input
-                    type="text"
-                    id="search-term"
-                    placeholder="Search for files..."
-                />
-                <button type="submit">Search</button>
-            </form>
-        </header>
+        <div id="head">
+            <header>
+                <h1>Conway's Game of Life</h1>
+                <form id="search-form">
+                    <input
+                        type="text"
+                        id="search-term"
+                        placeholder="Search for files..."
+                    />
+                    <button id="search-btn">Search</button>
+                </form>
+            </header>
+        </div>
+        <div id="buffer"></div>
         <div id="search-results"></div>
         <main>
             <div id="sketch-holder"></div>
         </main>
         <footer>
-            <div class="controls">
-                <button id="toggle-button">Start (Space)</button>
-                <button class="reset-btn">Reset</button>
-                <button class="randomize-btn">Randomize</button>
-                <label
-                    for="resize-slider"
-                    style="font-size: large; color: rgb(11, 11, 11)"
-                    >Resize :</label
-                >
-                <input
-                    type="range"
-                    id="resize-slider"
-                    class="resize-slider"
-                    min="30"
-                    max="2000"
-                    value="100"
-                />
-            </div>
+            <button id="toggle-button">Start (Space)</button>
+            <button class="reset-btn">Reset</button>
+            <button class="randomize-btn">Randomize</button>
+            <label
+                for="resize-slider"
+                style="font-size: large; color: rgb(11, 11, 11)"
+                >Resize :</label
+            >
+            <input
+                type="range"
+                id="resize-slider"
+                class="resize-slider"
+                min="30"
+                max="2000"
+                value="100"
+            />
         </footer>
         <script src="sketch.js"></script>
     </body>

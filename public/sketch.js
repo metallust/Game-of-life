@@ -15,7 +15,7 @@ let xlen, ylen;
 let file;
 
 // get header and footer elements
-const header = document.querySelector("header");
+const header = document.querySelector("#head");
 const footer = document.querySelector("footer");
 
 // get size of header and footer in pixels
@@ -334,23 +334,38 @@ function newLiveCells(text) {
 }
 
 const searchForm = document.querySelector("#search-form");
+
 searchForm.addEventListener("submit", async (event) => {
     event.preventDefault();
+    searchbtn = document.querySelector("#search-btn");
+    searchbtn.blur();
+    const searchResultsContainer = document.querySelector("#search-results");
+    // console.log(searchbtn.innerHTML);
+    if (searchbtn.innerHTML == "<strong>X</strong>") {
+        searchResultsContainer.innerHTML = "";
+        searchbtn.innerHTML = "Search";
+        searchbtn.style.backgroundColor = "";
+        searchbtn.style.width = "100px";
+        return;
+    }
     const searchTerm = document.querySelector("#search-term").value;
 
     const response = await fetch(`/search?term=${searchTerm}`);
     const json = await response.json();
 
     const results = json.result;
-    const searchResultsContainer = document.querySelector("#search-results");
     searchResultsContainer.innerHTML = "";
 
+    searchbtn.innerHTML = "<strong>X</strong>";
+    searchbtn.style.backgroundColor = "red";
+    searchbtn.style.width = "55px";
     if (results.length === 0) {
         searchResultsContainer.textContent = "No results found.";
     } else {
         results.forEach((result) => {
             const resultItem = document.createElement("div");
             resultItem.textContent = result;
+            resultItem.classList.add("my-div");
             resultItem.addEventListener("click", async function () {
                 const response = await fetch("/file?file=" + result);
                 const json = await response.json();
@@ -360,6 +375,9 @@ searchForm.addEventListener("submit", async (event) => {
                 const navbarTitle = document.querySelector("h1");
                 navbarTitle.textContent = result.slice(0, -4).toUpperCase();
                 file = result;
+                searchbtn.innerHTML = "Search";
+                searchbtn.style.backgroundColor = "";
+                searchbtn.style.width = "10px";
             });
             searchResultsContainer.appendChild(resultItem);
         });

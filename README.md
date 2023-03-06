@@ -2,8 +2,6 @@
 
 ### This is my version of Conway's Game of life
 
-### All the rle file are from conwaylife.com
-
--   rule = B3/S23
+### Before Starting download "all" folder from https://conwaylife.com/patterns/all.zip
 
 ### Preview : https://gabby-subdued-oak.glitch.me/

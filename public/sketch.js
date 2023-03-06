@@ -43,20 +43,20 @@ function setup() {
 
 function draw() {
     if (start) {
-        for (let index = 0; index < 1; index++) {
-            background(51, 50);
-            let temp = [];
-            for (let i = 0; i < grid.length; i++) {
-                temp.push(grid[i].update());
+        // for (let index = 0; index < 1; index++) {
+        background(51, 50);
+        let temp = [];
+        for (let i = 0; i < grid.length; i++) {
+            temp.push(grid[i].update());
+        }
+        for (let i = 0; i < grid.length; i++) {
+            if (grid[i].state !== temp[i]) {
+                grid[i].state = temp[i];
+                grid[i].display();
+            } else if (grid[i].state) {
+                grid[i].display();
             }
-            for (let i = 0; i < grid.length; i++) {
-                if (grid[i].state !== temp[i]) {
-                    grid[i].state = temp[i];
-                    grid[i].display();
-                } else if (grid[i].state) {
-                    grid[i].display();
-                }
-            }
+            // }
         }
     }
     // for (let i = 0; i < grid.length; i++) grid[i].display();

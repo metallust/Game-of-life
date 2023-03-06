@@ -41,7 +41,7 @@ app.get("/search", (request, response) => {
         }
         files = String(filenametext)
             .split("\n")
-            .filter((file) => file.includes(searchterm));
+            .filter((file) => file.includes(searchterm.toLowerCase()));
         response.json({
             status: "success",
             result: files,

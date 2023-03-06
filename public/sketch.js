@@ -135,7 +135,19 @@ function calculateOffset(text) {
     console.log(cols, rows, xlen + 30, ylen + 30);
 }
 
-function readingPlainText(text) {
+function skipingHead(text) {
+    let i = 0;
+    while (text[i] === "#" || text[i] === "x") {
+        while (text[i] !== "\n") i++;
+        i++;
+    }
+    return i;
+}
+
+function readingRLE(text) {
+    loadedtext = text;
+    let head = skipingHead(text);
+    text = text.slice(head);
     background(51);
     originx = floor(cols / 2);
     originy = floor(rows / 2);
@@ -166,61 +178,33 @@ function readingPlainText(text) {
         y = -yoff;
     console.log(grid.length);
 
-    for (let i = 0; i < text.length; i++) {
-        if (text[i] === "O") {
-            try {
-                let cell = grid[indexOf(originx + x, originy + y)];
-                cell.state = true;
-                cell.display();
-            } catch (error) {
-                console.log(
-                    "error" + i + " " + (originx + x) + " " + (originy + y)
-                );
+    for (let i = 0; text[i] != "!"; i++) {
+        if (!isNaN(text[i])) {
+            i++;
+            if (text[i] === "b") {
+                x += parseInt(text[i]);
+            } else if (text[i] === "o") {
+                for (let i = 0; i < parseInt(text[i]); i++) {
+                    let cell = grid[indexOf(originx + x, originy + y)];
+                    cell.state = true;
+                    cell.display();
+                    x++;
+                }
+            } else {
+                y++;
             }
+        } else if (text[i] === "b") {
             x++;
-        } else if (text[i] === "\n") {
-            x = -xoff;
+        } else if (text[i] === "o") {
+            let cell = grid[indexOf(originx + x, originy + y)];
+            cell.state = true;
+            cell.display();
+            x++;
+        } else {
+            //$
             y++;
-        } else if (text[i] === ".") {
-            x++;
         }
     }
-}
-
-function readingRLE(text) {
-    let head = skipingHead(text);
-    loadedtext = convertRLEtoPlainText(text, head);
-    readingPlainText(loadedtext);
-}
-
-function skipingHead(text) {
-    let i = 0;
-    while (text[i] === "#" || text[i] === "x") {
-        while (text[i] !== "\n") i++;
-        i++;
-    }
-    return i;
-}
-
-function convertRLEtoPlainText(text, head) {
-    let newTxt = "";
-    let m = 1;
-    for (let i = head; text[i] !== "!"; i++) {
-        if (text[i] === "\r" || text[i] === "\n") continue;
-        let num = "";
-        for (let j = i; !isNaN(text[i]); j++) {
-            num += text[j];
-            i = j;
-        }
-        num === "" ? (m = 1) : (m = parseInt(num));
-        newTxt += text[i].repeat(m);
-    }
-    newTxt = newTxt
-        .replaceAll("b", ".")
-        .replaceAll("o", "O")
-        .replaceAll("$", "\n");
-    console.log(newTxt);
-    return newTxt;
 }
 
 async function fetchRandomFileText() {
@@ -246,7 +230,7 @@ function reset() {
     updateToggle();
     background(51);
     for (let i = 0; i < grid.length; i++) grid[i].state = false;
-    readingPlainText(loadedtext);
+    readingRLE(loadedtext);
 }
 
 function randomize() {
@@ -271,7 +255,7 @@ function changingCellWidth(newCols) {
         }
     }
     for (let i = 0; i < grid.length; i++) grid[i].addneigbour();
-    readingPlainText(loadedtext);
+    readingRLE(loadedtext);
     slider.value = cols;
 }
 
@@ -383,3 +367,26 @@ searchForm.addEventListener("submit", async (event) => {
         });
     }
 });
+
+// dumpter
+
+// function convertRLEtoPlainText(text, head) {
+//     let newTxt = "";
+//     let m = 1;
+//     for (let i = head; text[i] !== "!"; i++) {
+//         if (text[i] === "\r" || text[i] === "\n") continue;
+//         let num = "";
+//         for (let j = i; !isNaN(text[i]); j++) {
+//             num += text[j];
+//             i = j;
+//         }
+//         num === "" ? (m = 1) : (m = parseInt(num));
+//         newTxt += text[i].repeat(m);
+//     }
+//     newTxt = newTxt
+//     .replaceAll("b", ".")
+//     .replaceAll("o", "O")
+//     .replaceAll("$", "\n");
+//     console.log(newTxt);
+//     return newTxt;
+// }

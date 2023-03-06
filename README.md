@@ -4,4 +4,4 @@
 
 ### Before Starting download "all" folder from https://conwaylife.com/patterns/all.zip
 
-### Preview : https://gabby-subdued-oak.glitch.me/
+### Preview : https://gray-wandering-orangutan.glitch.me/

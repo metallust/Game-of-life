@@ -127,12 +127,40 @@ addEventListener("keydown", (e) => {
 function calculateOffset(text) {
     xoff = 0;
     yoff = 0;
-    let temptext = text.split("\n");
-    ylen = temptext.length;
-    xlen = max(temptext.map((element) => element.length));
-    xoff = floor(xlen / 2);
-    yoff = floor(ylen / 2);
-    console.log(cols, rows, xlen + 30, ylen + 30);
+
+    let i = 0;
+    let xcount = 0;
+    while (text[i] != "!") {
+        if (text[i] === "\r" || text[i] === "\n") {
+            i++;
+            continue;
+        }
+        if (!isNaN(text[i])) {
+            //counting number
+            let number = "";
+            while (!isNaN(text[i])) {
+                number += text[i];
+                i++;
+            }
+
+            if (text[i] === "b" || text[i] == "o") {
+                xcount += parseInt(number);
+            } else {
+                xoff = max(xoff, xcount);
+                yoff += parseInt(number);
+            }
+        } else if (text[i] === "b") xcount++;
+        else if (text[i] === "o") xcount++;
+        else {
+            xoff = max(xoff, xcount);
+            yoff++; //$
+        }
+        i++;
+    }
+
+    xoff = floor(xoff / 2);
+    yoff = floor(yoff / 2);
+    console.log(cols, rows, xoff + 30, yoff + 30);
 }
 
 function skipingHead(text) {
@@ -174,24 +202,29 @@ function readingRLE(text) {
         changingCellWidth(cols);
         return;
     }
-    let x = -xoff,
-        y = -yoff;
-    console.log(grid.length);
-
+    let x = 0,
+        y = 0;
+    console.log(text);
     for (let i = 0; text[i] != "!"; i++) {
+        if (text[i] === "\r" || text[i] === "\n") continue;
         if (!isNaN(text[i])) {
-            i++;
+            number = "";
+            while (!isNaN(text[i])) {
+                number += text[i];
+                i++;
+            }
             if (text[i] === "b") {
-                x += parseInt(text[i]);
+                x += parseInt(number);
             } else if (text[i] === "o") {
-                for (let i = 0; i < parseInt(text[i]); i++) {
+                for (let i = 0; i < parseInt(number); i++) {
                     let cell = grid[indexOf(originx + x, originy + y)];
                     cell.state = true;
                     cell.display();
                     x++;
                 }
             } else {
-                y++;
+                x = -xoff;
+                y += parseInt(number);
             }
         } else if (text[i] === "b") {
             x++;
@@ -202,6 +235,7 @@ function readingRLE(text) {
             x++;
         } else {
             //$
+            x = -xoff;
             y++;
         }
     }
